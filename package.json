@@ -1,37 +1,25 @@
 {
   "name": "vue3_vite_md",
-  "version": "0.1.0",
-  "private": true,
+  "version": "0.0.0",
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "dev": "vite",
+    "build": "vite build"
   },
   "dependencies": {
-    "core-js": "^3.8.3",
-    "vue": "^3.2.13",
-    "vue-class-component": "^8.0.0-0",
-    "vue-router": "^4.0.3",
-    "vuex": "^4.0.0"
+    "ant-design-vue": "^3.2.20",
+    "vue": "^3.0.4",
+    "vue-router": "^4.2.2"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.4.0",
-    "@typescript-eslint/parser": "^5.4.0",
-    "@vue/cli-plugin-babel": "~5.0.0",
-    "@vue/cli-plugin-eslint": "~5.0.0",
-    "@vue/cli-plugin-router": "~5.0.0",
-    "@vue/cli-plugin-typescript": "~5.0.0",
-    "@vue/cli-plugin-vuex": "~5.0.0",
-    "@vue/cli-service": "~5.0.0",
-    "@vue/eslint-config-typescript": "^9.1.0",
-    "eslint": "^7.32.0",
-    "eslint-plugin-vue": "^8.0.3",
-    "lint-staged": "^11.1.2",
-    "sass": "^1.32.7",
-    "sass-loader": "^12.0.0",
-    "typescript": "~4.5.5"
-  },
-  "gitHooks": {
-    "pre-commit": "lint-staged"
+    "@types/node": "^20.3.3",
+    "@vue/compiler-sfc": "^3.0.4",
+    "babel-plugin-import": "^1.13.6",
+    "eslint": "^8.44.0",
+    "eslint-plugin-vue": "^9.15.1",
+    "pinia": "^2.1.4",
+    "sass": "^1.63.6",
+    "sass-loader": "^13.3.2",
+    "typescript": "^5.1.6",
+    "vite": "^1.0.0-rc.13"
   }
 }
