@@ -13,7 +13,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from 'vue';
-import AsideMenu from "./components/AsideMenu/AsideMenu.vue";
+import AsideMenu from "./components/AsideMenu/index.vue";
 export default defineComponent({
   components: {
     AsideMenu,
