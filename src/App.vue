@@ -7,8 +7,7 @@
       </div>
     </header>
     <main>
-      <aside><AsideMenu/></aside>
-      <content></content>
+      <router-view></router-view>
     </main>
   </div>
 </template>
@@ -57,12 +56,6 @@ export default defineComponent({
   main {
     flex: 1;
     display: flex;
-    aside {
-      
-    }
-    content {
-      flex: 1;
-    }
   }
 }
 </style>

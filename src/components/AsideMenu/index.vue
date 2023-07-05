@@ -33,6 +33,7 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 .aside {
+  padding-top: 10px;
   height: 100%;
   :deep(.ant-menu) {
     height: 100%;

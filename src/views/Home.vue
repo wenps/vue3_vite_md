@@ -1,19 +1,31 @@
 <template>
-  <h1>{{ msg }}</h1>
-  <button @click="count++">count is: {{ count }}</button>
-  <p>Edit <code>components/HelloWorld.vue</code> to test hot module replacement.</p>
+  <div>
+    <aside><AsideMenu/></aside>
+    <content>
+      <router-view></router-view>
+    </content>
+  </div>
 </template>
-
-<script>
-export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
+<script lang="ts">
+import { defineComponent } from 'vue';
+import AsideMenu from "../components/AsideMenu/index.vue";
+export default defineComponent({
+  components: {
+    AsideMenu,
   },
-  data() {
-    return {
-      count: 0
+});
+</script>
+<style lang="scss" scoped>
+  div {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    aside {
+      
+    }
+    content {
+      flex: 1;
     }
   }
-}
-</script>
+</style>
+
