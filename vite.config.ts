@@ -33,6 +33,7 @@ export default defineConfig({
                     });
                     // 基于html生成SFC
                     const SFC = SFCRender(html)
+                    
                     return {code: SFC, map: null}
                 }
             }
@@ -47,7 +48,13 @@ function componentRender(wrapCodeWithCard = true) {
   
     renderer.html = function (html:any) {
         const regex = /<([^>\/\s]+)(?:\s+[^>]+)?>/g;
-        const templateTags = html.match(regex).map((tag:any) => tag.replace(/[<>]/g, ''));
+        const templateTags = html.match(regex).map((tag:any) => {
+            const tagRel = tag.replace(/[<>]/g, '')
+            if(tagRel.includes(" ")) {
+                return tagRel.split(" ")[0];
+            }
+            return tagRel
+        });
         components = templateTags.filter((tag:any) => !tags.includes(tag));
         return html
     }

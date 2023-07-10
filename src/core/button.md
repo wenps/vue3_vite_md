@@ -6,7 +6,7 @@ color
 size
 ```
 
-<HelloWorld>
+<HelloWorld name="xx">
 </HelloWorld>
 
  ## 表格
