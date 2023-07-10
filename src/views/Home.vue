@@ -8,7 +8,7 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue';
-import AsideMenu from "../components/AsideMenu/index.vue";
+import AsideMenu from "components/AsideMenu/index.vue";
 export default defineComponent({
   components: {
     AsideMenu,
@@ -25,6 +25,7 @@ export default defineComponent({
     }
     content {
       flex: 1;
+      padding: 20px;
     }
   }
 </style>

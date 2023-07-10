@@ -1,21 +1,32 @@
-const path = require("path")
+import path from "path";
+import { defineConfig } from 'vite'
+import createVuePlugin from '@vitejs/plugin-vue'
+const vuePlugin = createVuePlugin({ include: [/\.vue$/, /\.md$/] })
 
-function pathResolve(dir: string) {
-    return path.join(__dirname, dir);
-}
-
-module.exports = {
-    // 服务端渲染
-    ssr: false,
-    // 是否开启 https
-    https: false,
-    // 设置目录别名
-    alias: {
-        // 键必须以斜线开始和结束
-        '/@/': pathResolve('./src'),
-        '/@components/': pathResolve('./src/components')
+export default defineConfig({
+    resolve: {  
+        // 设置目录别名
+        alias: {
+            // 键必须以斜线开始和结束
+            '@': path.resolve(__dirname, './src'),
+            'components': path.resolve(__dirname, './src/components'),
+            'core': path.resolve(__dirname, './src/core'),
+            'assets': path.resolve(__dirname, './src/assets'),
+            'interface': path.resolve(__dirname, './src/interface'),
+            'plugins': path.resolve(__dirname, './src/plugins'),
+        },
     },
-    // 跨域设置
-    proxy: {
-    }
-}
+    plugins: [
+        {
+            name: 'print-code',
+            transform(code, id) {
+                if (id.endsWith('.md')) {
+                    console.log(`目标文件 ${id} 的代码：`);
+                    console.log(code);
+                    return {code, map: null}
+                }
+            }
+        },
+        vuePlugin
+    ]
+});

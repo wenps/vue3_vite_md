@@ -3,7 +3,7 @@ export const routes = [
   {
     path: '/',
     name: 'home',
-    component: () => import("../views/Home.vue"),
+    component: () => import("@/views/Home.vue"),
     mate: {
         isCore: true
     },
@@ -11,7 +11,7 @@ export const routes = [
         {
             path: '/button',
             name: 'button',
-            component: () => import("../core/button.vue"),
+            component: () => import("core/button.md"),
             mate: {
                 en_name: 'button',
                 zh_name: '按钮'
@@ -20,7 +20,7 @@ export const routes = [
         {
             path: '/input',
             name: 'input',
-            component: () => import("../core/input.vue"),
+            component: () => import("core/input.md"),
             mate: {
                 en_name: 'input',
                 zh_name: '输入框'

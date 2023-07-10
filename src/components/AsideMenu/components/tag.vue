@@ -6,7 +6,7 @@
 </template>
 <script setup lang="ts">
   import { defineProps} from 'vue';
-  import { interRouter } from "../../../interface/router";
+  import { interRouter } from "interface/router";
   import { useRouter } from 'vue-router'
 
   const router =  useRouter()

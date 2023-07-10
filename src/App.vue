@@ -12,12 +12,8 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue';
-import AsideMenu from "./components/AsideMenu/index.vue";
+import { defineComponent } from 'vue';
 export default defineComponent({
-  components: {
-    AsideMenu,
-  },
 });
 </script>
 <style lang="scss" scoped>

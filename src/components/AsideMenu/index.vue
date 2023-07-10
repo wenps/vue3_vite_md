@@ -13,7 +13,7 @@
 <script lang="ts">
 import { defineComponent, reactive } from 'vue';
 import tag from "./components/tag.vue";
-import { routes } from "/@/router/index";
+import { routes } from "@/router/index";
 export default defineComponent({
   components: {
     tag,
