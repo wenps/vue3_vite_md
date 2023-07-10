@@ -1,4 +1,1 @@
-<template>
-  <div>input</div>
-</template>
-
+button
