@@ -6,6 +6,7 @@ let components:any = [] // 存储md中出现的所有vue组件
 let Path: any = {} // 存放组件相关地址的目录
 let registerComponentNameList: string[] = [] // 获取注册的组件名称列表
 
+// md转vue插件
 export default function vuePluginsMdToVue(pathObj:any) {
   return {
     name: 'vue-plugins-md-to-vue',
@@ -16,6 +17,7 @@ export default function vuePluginsMdToVue(pathObj:any) {
       if (path.endsWith('.md')) {
           // 解析md文档为tokens数组
           const tokens = marked.lexer(code)
+          
           
           // 获取所有在组件文件夹下出现的组件名
           registerComponentNameList = getRegisterComponentNameList() // 获取注册的组件名称列表
@@ -38,24 +40,73 @@ function componentRender(wrapCodeWithCard = true) {
   const renderer = new marked.Renderer()
 
   renderer.html = function (html:any) {
-      // 获取html代码中出现的所有标签
-      const regex = /<([^>\/\s]+)(?:\s+[^>]+)?>/g;
-      const templateTags = html.match(regex).map((tag:any) => {
-          const tagRel = tag.replace(/[<>]/g, '')
-          if(tagRel.includes(" ")) {
-              return tagRel.split(" ")[0];
-          }
-          return tagRel
-      });
-      
-      // 将出现的所有vue组件都存储到components中并去重
-      components = [...new Set([...components, ...templateTags.filter((tag:any) => registerComponentNameList.includes(tag))])];
-      
-      return html
+      let realHtml;
+      // 解析html中的出现的组件
+      realHtml = parseHTMLComponents(html)
+      return realHtml
   }
   return renderer
 }
 
+// 解析html特殊标签
+function extractAndRemoveTagContent(html: any, tagName: string) {
+  const regex = new RegExp(`<${tagName}([^>]*)>[\\s\\S]*?<\\/${tagName}>`, 'g');
+    const matches = html.match(regex);
+
+    if (matches) {
+        const extractedContents = [];
+        const extractedAttributes = [];
+
+        for (const match of matches) {
+            const tagAttributesMatch = match.match(new RegExp(`<${tagName}([^>]*)>`));
+            const tagAttributesString = tagAttributesMatch ? tagAttributesMatch[1] : '';
+            const tagAttributes = parseTagAttributes(tagAttributesString);
+
+            const content = match.replace(new RegExp(`<${tagName}[^>]*>|<\\/${tagName}>`, 'g'), '');
+            extractedContents.push(content)
+            extractedAttributes.push(tagAttributes);
+        }
+
+        const cleanedHtml = html.replace(regex, '');
+
+        return [extractedContents, extractedAttributes, cleanedHtml];
+    } else {
+        return [[], [], html]
+    }
+}
+
+// 解析标签属性
+function parseTagAttributes(attributesString:any) {
+  const attributes:any = {};
+  const regex = /(\w+)\s*=\s*['"]([^'"]*)['"]/g;
+
+  let match;
+  while ((match = regex.exec(attributesString)) !== null) {
+      const attributeName = match[1];
+      const attributeValue = match[2];
+      attributes[attributeName] = attributeValue;
+  }
+
+  return attributes;
+}
+
+// 解析组件标签
+function parseHTMLComponents(html:any) {
+  // 获取html代码中出现的所有标签
+  const regex = /<([^>\/\s]+)(?:\s+[^>]+)?>/g;
+  const templateTags = html.match(regex).map((tag:any) => {
+      const tagRel = tag.replace(/[<>]/g, '')
+      if(tagRel.includes(" ")) {
+          return tagRel.split(" ")[0];
+      }
+      return tagRel
+  });
+  // 将出现的所有vue组件都存储到components中并去重
+  components = [...new Set([...components, ...templateTags.filter((tag:any) => registerComponentNameList.includes(tag))])];
+  return html
+}
+
+// 获取已注册的组件名称
 function getRegisterComponentNameList(): string[] {
   const list: string[] = [];
   try {
