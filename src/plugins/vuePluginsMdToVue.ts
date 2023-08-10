@@ -2,16 +2,25 @@ import {marked} from 'marked';
 import path from "path";
 import fs  from "fs";
 
-let components:any = [] // 存储md中出现的所有vue组件
-let Path: any = {} // 存放组件相关地址的目录
-let registerComponentNameList: string[] = [] // 获取注册的组件名称列表
+let components: any[], // 存储md中出现的所有vue组件
+    Path: any, // 存放组件相关地址的目录
+    registerComponentNameList: string[], // 获取注册的组件名称列表
+    scriptContents: any, // 自定义的脚本内容
+    scriptAttributes: any , // 自定义的脚本属性
+    cssContents: any, // 自定义的样式内容
+    cssAttributes: any // 自定义的样式属性
+ 
+// 数据重置
+function initData() {
+  [components, Path, registerComponentNameList, scriptContents, scriptAttributes, cssContents, cssAttributes] = [[], {}, [], [], [], [], []]; 
+}
 
 // md转vue插件
 export default function vuePluginsMdToVue(pathObj:any) {
   return {
     name: 'vue-plugins-md-to-vue',
     transform(code:any, path:any) {
-      components = [] // 重置components
+      initData()
       Path = pathObj
 
       if (path.endsWith('.md')) {
@@ -41,8 +50,10 @@ function componentRender(wrapCodeWithCard = true) {
 
   renderer.html = function (html:any) {
       let realHtml;
+      [scriptContents, scriptAttributes, realHtml] = extractAndRemoveTagContent(html, 'vueScript');
+      [cssContents, cssAttributes, realHtml] = extractAndRemoveTagContent(realHtml, 'vueStyle')
       // 解析html中的出现的组件
-      realHtml = parseHTMLComponents(html)
+      realHtml = parseHTMLComponents(realHtml)
       return realHtml
   }
   return renderer

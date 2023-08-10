@@ -24,3 +24,12 @@ size
 </HelloWorld>
 </div>
 
+上下结构
+```mermaid
+graph TD
+    A[公司] -->| 下 班 | B(菜市场)
+    B --> C{看见<br>卖西瓜的}
+    C -->|Yes| D[买一个包子]
+    C -->|No| E[买一斤包子]
+```
+
