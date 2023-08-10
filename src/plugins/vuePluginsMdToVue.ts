@@ -10,24 +10,18 @@ let scriptAttributes: any[] = []; // 自定义的脚本属性
 let cssContents: any[] = []; // 自定义的样式内容
 let cssAttributes: any[] = []; // 自定义的样式属性
 
-// 数据重置
-function initData() {
-  [components, Path, registerComponentNameList, scriptContents, scriptAttributes, cssContents, cssAttributes] =
-    [[], {}, [], [], [], [], []];
-}
-
 // md转vue插件
 export default function vuePluginsMdToVue(pathObj:any) {
   return {
     name: 'vue-plugins-md-to-vue',
     transform(code:any, path:any) {
+      // 初始化数据
       initData()
       Path = pathObj
-
+      // 处理md文件
       if (path.endsWith('.md')) {
           // 解析md文档为tokens数组
           const tokens = marked.lexer(code)
-          
           
           // 获取所有在组件文件夹下出现的组件名
           registerComponentNameList = getRegisterComponentNameList() // 获取注册的组件名称列表
@@ -45,6 +39,16 @@ export default function vuePluginsMdToVue(pathObj:any) {
   }
 }
 
+// 数据重置
+function initData() {
+  components= [];
+  Path= {};
+  registerComponentNameList= [];
+  scriptContents= [];
+  scriptAttributes= [];
+  cssContents= [];
+  cssAttributes= [];
+}
 // 组件html解析
 function componentRender(wrapCodeWithCard = true) {
   const renderer = new marked.Renderer()
@@ -72,7 +76,7 @@ function extractAndRemoveTagContent(html: any, tagName: string) {
         for (const match of matches) {
             const tagAttributesMatch = match.match(new RegExp(`<${tagName}([^>]*)>`));
             const tagAttributesString = tagAttributesMatch ? tagAttributesMatch[1] : '';
-            const tagAttributes = parseTagAttributes(tagAttributesString);
+            const tagAttributes = extractTagContents(tagAttributesString);
 
             const content = match.replace(new RegExp(`<${tagName}[^>]*>|<\\/${tagName}>`, 'g'), '');
             extractedContents.push(content)
@@ -88,18 +92,17 @@ function extractAndRemoveTagContent(html: any, tagName: string) {
 }
 
 // 解析标签属性
-function parseTagAttributes(attributesString:any) {
-  const attributes:any = {};
-  const regex = /(\w+)\s*=\s*['"]([^'"]*)['"]/g;
+function extractTagContents(tagString: string) {
+  const regex = /<(\w+)([^>]*)>([\s\S]*?)<\/\1>/;
+  const matches = tagString.match(regex);
 
-  let match;
-  while ((match = regex.exec(attributesString)) !== null) {
-      const attributeName = match[1];
-      const attributeValue = match[2];
-      attributes[attributeName] = attributeValue;
+  if (matches) {
+    const [, tagName, attributes] = matches;
+
+    return attributes;
+  } else {
+    return '';
   }
-
-  return attributes;
 }
 
 // 解析组件标签
@@ -135,12 +138,17 @@ function getRegisterComponentNameList(): string[] {
 // 构造SFC
 function SFCRender(html:string, mdPath:string) {
   const importComponent = components
-  .map((item:any) => `import ${item} from '${getRelativePath(item, mdPath)}.vue'`)
-  .join('\n')
-const registerComponent = components
-  .map((item:any) => item)
-  .join(',\n')
-  const SFC = `
+    .map((item:any) => `import ${item} from '${getRelativePath(item, mdPath)}.vue'`)
+    .join('\n')
+  const registerComponent = components
+    .map((item:any) => item)
+    .join(',\n')
+  const baseCss = cssContents.map((item, index) => `
+    <style ${cssAttributes[index]} >
+    ${item}
+    </style>
+  `)
+  let SFC = `
     <template>
         <div>
             ${html}
@@ -154,8 +162,8 @@ const registerComponent = components
             },
         }
     </script>
+    ${baseCss}
   `
-  
   return SFC
 }
 
@@ -164,8 +172,6 @@ function getRelativePath (item:string, mdPath:string) {
     const filePath = mdPath
     const targetPath = path.join(Path.rootPath, Path.componentsPath + `/${item}`)
     const relativePath = path.relative(path.dirname(filePath), targetPath);
-    const componentsRelativePath = relativePath.replace(/\\/g, '/')
-    
-    
+    const componentsRelativePath = relativePath.replace(/\\/g, '/') 
     return componentsRelativePath
 }
