@@ -12,13 +12,8 @@ let cssAttributes: any[] = []; // 自定义的样式属性
 
 // 数据重置
 function initData() {
-  components = [];
-  Path = {};
-  registerComponentNameList = [];
-  scriptContents = [];
-  scriptAttributes = [];
-  cssContents = [];
-  cssAttributes = [];
+  [components, Path, registerComponentNameList, scriptContents, scriptAttributes, cssContents, cssAttributes] =
+    [[], {}, [], [], [], [], []];
 }
 
 // md转vue插件
