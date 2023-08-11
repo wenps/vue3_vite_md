@@ -1,9 +1,10 @@
 import path from "path";
 import { defineConfig } from 'vite'
-import createVuePlugin from '@vitejs/plugin-vue'
+import createVuePlugin from 'vite-plugin-vue2'
 import vuePluginsMdToVue from "./src/plugins/vuePluginsMdToVue";
-const vuePlugin = createVuePlugin({ include: [/\.vue$/, /\.md$/] })
+import less from 'vite-plugin-less2';
 
+const vuePlugin = createVuePlugin({ include: [/\.vue$/, /\.md$/] })
 
 export default defineConfig({
     resolve: {  
@@ -20,6 +21,7 @@ export default defineConfig({
     },
     plugins: [
         vuePluginsMdToVue({componentsPath:'./src/components',rootPath:__dirname}),
-        vuePlugin
+        vuePlugin,
+        less()
     ]
 });

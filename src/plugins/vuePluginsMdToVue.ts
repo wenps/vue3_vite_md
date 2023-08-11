@@ -55,10 +55,15 @@ function componentRender(wrapCodeWithCard = true) {
 
   renderer.html = function (html:any) {
       let realHtml;
+      // 解析 自定义脚本 标签
       [scriptContents, scriptAttributes, realHtml] = extractAndRemoveTagContent(html, 'vueScript');
+      
+      // 解析 自定义样式 标签
       [cssContents, cssAttributes, realHtml] = extractAndRemoveTagContent(realHtml, 'vueStyle')
+      
       // 解析html中的出现的组件
       realHtml = parseHTMLComponents(realHtml)
+      
       return realHtml
   }
   return renderer
@@ -109,13 +114,13 @@ function extractTagContents(tagString: string) {
 function parseHTMLComponents(html:any) {
   // 获取html代码中出现的所有标签
   const regex = /<([^>\/\s]+)(?:\s+[^>]+)?>/g;
-  const templateTags = html.match(regex).map((tag:any) => {
+  const templateTags = html?.match(regex)?.map((tag:any) => {
       const tagRel = tag.replace(/[<>]/g, '')
       if(tagRel.includes(" ")) {
           return tagRel.split(" ")[0];
       }
       return tagRel
-  });
+  }) || [];
   // 将出现的所有vue组件都存储到components中并去重
   components = [...new Set([...components, ...templateTags.filter((tag:any) => registerComponentNameList.includes(tag))])];
   return html
@@ -143,6 +148,7 @@ function SFCRender(html:string, mdPath:string) {
   const registerComponent = components
     .map((item:any) => item)
     .join(',\n')
+  
   const baseCss = cssContents.map((item, index) => `
     <style ${cssAttributes[index]} >
     ${item}

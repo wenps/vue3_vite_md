@@ -8,7 +8,7 @@ color
 size
 ```
 
-<div style="background: red">
+<div class="a" style="background: red">
 1232
 <HelloWorld name="xx">
 </HelloWorld>
@@ -32,4 +32,10 @@ graph TD
     C -->|Yes| D[买一个包子]
     C -->|No| E[买一斤包子]
 ```
+
+<vueStyle>
+.a {
+    color: red
+}
+</vueStyle>
 
