@@ -1,8 +1,14 @@
+/*
+ * @Author: xiaoshanwen
+ * @Date: 2023-11-14 16:08:12
+ * @LastEditTime: 2023-11-14 16:10:27
+ * @FilePath: /vue3_vite_md/vite.config.ts
+ */
 import path from "path";
 import { defineConfig } from 'vite'
-import createVuePlugin from 'vite-plugin-vue2'
+import createVuePlugin from '@vitejs/plugin-vue';
 import vuePluginsMdToVue from "./src/plugins/vuePluginsMdToVue";
-import less from 'vite-plugin-less2';
+// import less from 'vite-plugin-less2';
 
 const vuePlugin = createVuePlugin({ include: [/\.vue$/, /\.md$/] })
 
@@ -22,6 +28,6 @@ export default defineConfig({
     plugins: [
         vuePluginsMdToVue({componentsPath:'./src/components',rootPath:__dirname}),
         vuePlugin,
-        less()
+        // less()
     ]
 });
